@@ -43,3 +43,23 @@ Homework 1. Kubernetes-intro
  		kubectl apply -f frontend-pod-healthy.yaml
 
  		```
+
+
+Homework 2. Kubernetes-controllers
+==================================
+1. Развернут кластер в **kind**
+   ```
+   kind create cluster --config kind-config.yaml
+   ```
+1. Создаем ReplicaSet для frontend приложения в кластере. Проверяем работу RS (scale, delete pod, apply нового манифеста с новым значением replica).
+   ```
+   kubectl apply -f frontend-replicaset.yaml | kubectl get pods -l app=frontend -w
+   ```
+1. Если в манифесте RS изменить tag образа ничего не произойдет, т.к. RS следит только за количеством PODs.
+1. Создан Deployment для Paymentservice.
+1. При обновлении манифеста Deployment изменения автоматически раскатываются в кластере
+1. На примере созданного Deployment проверен механизм rollback
+   ```
+   kubectl rollout history deployment payment
+   kubectl rollout undo deployment payment --to-revision=1 | kubectl get rs -l app=paymentservice -w
+   ```
